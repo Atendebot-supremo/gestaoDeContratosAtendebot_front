@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import contratosService from '../../services/contratosService'
-import clientesService from '../../services/clientesService'
-import projetosService from '../../services/projetosService'
+import contratosService from '../../services/contratosService.mock'
+import clientesService from '../../services/clientesService.mock'
+import projetosService from '../../services/projetosService.mock'
 
 function ContratoForm() {
   const navigate = useNavigate()
@@ -21,9 +21,12 @@ function ContratoForm() {
     plano_nome: '',
     valor_mensalidade: '',
     valor_setup: '',
+    prazo_implementacao_dias: '',
+    provedor_openai: '',
+    forma_pagamento: '',
     observacoes_ia: '',
-    assinante_nome: '',
-    assinante_email: '',
+    assinante_venda_nome: '',
+    assinante_venda_email: '',
   })
 
   useEffect(() => {
@@ -56,8 +59,8 @@ function ContratoForm() {
       // Pré-preencher dados do assinante
       setFormData(prev => ({
         ...prev,
-        assinante_nome: cliente.assinante_nome || '',
-        assinante_email: cliente.assinante_email || '',
+        assinante_venda_nome: cliente.assinante_nome || '',
+        assinante_venda_email: cliente.assinante_email || '',
       }))
     } catch (err) {
       console.error('Erro ao carregar dados do cliente:', err)
@@ -177,6 +180,48 @@ function ContratoForm() {
           </div>
         </div>
 
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <div className="form-group" style={{ flex: 1 }}>
+            <label>Prazo Implementação (dias)</label>
+            <input
+              type="number"
+              name="prazo_implementacao_dias"
+              value={formData.prazo_implementacao_dias}
+              onChange={handleChange}
+              min="0"
+              placeholder="Ex: 30"
+            />
+          </div>
+
+          <div className="form-group" style={{ flex: 1 }}>
+            <label>Provedor OpenAI</label>
+            <select
+              name="provedor_openai"
+              value={formData.provedor_openai}
+              onChange={handleChange}
+            >
+              <option value="">Selecione...</option>
+              <option value="labfy">Labfy</option>
+              <option value="cliente">Cliente</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>Forma de Pagamento</label>
+          <select
+            name="forma_pagamento"
+            value={formData.forma_pagamento}
+            onChange={handleChange}
+          >
+            <option value="">Selecione...</option>
+            <option value="Boleto">Boleto</option>
+            <option value="Cartão de Crédito">Cartão de Crédito</option>
+            <option value="Pix">Pix</option>
+            <option value="Transferência">Transferência</option>
+          </select>
+        </div>
+
         <div className="form-group">
           <label>Observações para IA</label>
           <textarea
@@ -188,14 +233,14 @@ function ContratoForm() {
           />
         </div>
 
-        <h3 style={{ marginTop: '2rem' }}>Dados do Assinante</h3>
+        <h3 style={{ marginTop: '2rem' }}>Dados do Assinante (Venda)</h3>
 
         <div className="form-group">
           <label>Nome do Assinante *</label>
           <input
             type="text"
-            name="assinante_nome"
-            value={formData.assinante_nome}
+            name="assinante_venda_nome"
+            value={formData.assinante_venda_nome}
             onChange={handleChange}
             required
           />
@@ -205,8 +250,8 @@ function ContratoForm() {
           <label>Email do Assinante *</label>
           <input
             type="email"
-            name="assinante_email"
-            value={formData.assinante_email}
+            name="assinante_venda_email"
+            value={formData.assinante_venda_email}
             onChange={handleChange}
             required
           />

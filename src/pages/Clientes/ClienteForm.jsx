@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import clientesService from '../../services/clientesService'
+import clientesService from '../../services/clientesService.mock'
+import { formatCNPJ, cleanCNPJ } from '../../utils/masks'
 
 function ClienteForm() {
   const { id } = useParams()
@@ -16,21 +17,16 @@ function ClienteForm() {
   const [formData, setFormData] = useState({
     razao_social: '',
     cnpj: '',
-    endereco: '',
-    cidade: '',
-    estado: '',
-    email_principal: '',
-    telefone_principal: '',
+    endereco_completo: '',
+    cidade_estado: '',
+    asaas_customer_id: '',
     // Contato Assinante
     assinante_nome: '',
     assinante_email: '',
-    assinante_telefone: '',
-    assinante_cargo: '',
     // Contato Financeiro
     financeiro_nome: '',
     financeiro_email: '',
     financeiro_telefone: '',
-    financeiro_cargo: '',
   })
 
   useEffect(() => {
@@ -63,10 +59,20 @@ function ClienteForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    
+    if (name === 'cnpj') {
+      // Aplicar máscara de CNPJ
+      const formattedValue = formatCNPJ(value)
+      setFormData(prev => ({
+        ...prev,
+        [name]: formattedValue
+      }))
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }))
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -76,11 +82,18 @@ function ClienteForm() {
 
     try {
       setLoading(true)
+      
+      // Limpar CNPJ antes de enviar
+      const dataToSend = {
+        ...formData,
+        cnpj: cleanCNPJ(formData.cnpj)
+      }
+      
       if (isEdit) {
-        await clientesService.update(id, formData)
+        await clientesService.update(id, dataToSend)
         setSuccess('Cliente atualizado com sucesso!')
       } else {
-        await clientesService.create(formData)
+        await clientesService.create(dataToSend)
         setSuccess('Cliente criado com sucesso!')
         setTimeout(() => navigate('/clientes'), 2000)
       }
@@ -154,57 +167,40 @@ function ClienteForm() {
           </div>
 
           <div className="form-group">
-            <label>Endereço</label>
+            <label>Endereço Completo</label>
             <input
               type="text"
-              name="endereco"
-              value={formData.endereco}
+              name="endereco_completo"
+              value={formData.endereco_completo}
               onChange={handleChange}
-            />
-          </div>
-
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <div className="form-group" style={{ flex: 2 }}>
-              <label>Cidade</label>
-              <input
-                type="text"
-                name="cidade"
-                value={formData.cidade}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group" style={{ flex: 1 }}>
-              <label>Estado</label>
-              <input
-                type="text"
-                name="estado"
-                value={formData.estado}
-                onChange={handleChange}
-                maxLength="2"
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>Email Principal *</label>
-            <input
-              type="email"
-              name="email_principal"
-              value={formData.email_principal}
-              onChange={handleChange}
-              required
+              placeholder="Rua, número, complemento, bairro"
             />
           </div>
 
           <div className="form-group">
-            <label>Telefone Principal</label>
+            <label>Cidade/Estado</label>
             <input
-              type="tel"
-              name="telefone_principal"
-              value={formData.telefone_principal}
+              type="text"
+              name="cidade_estado"
+              value={formData.cidade_estado}
               onChange={handleChange}
+              placeholder="Ex: São Paulo - SP"
             />
+          </div>
+
+          <div className="form-group">
+            <label>ID Cliente Asaas</label>
+            <input
+              type="text"
+              name="asaas_customer_id"
+              value={formData.asaas_customer_id}
+              onChange={handleChange}
+              placeholder="Gerado automaticamente pelo sistema"
+              disabled
+            />
+            <small style={{ color: '#666', marginTop: '0.5rem', display: 'block' }}>
+              Este campo é preenchido automaticamente ao criar cobrança no Asaas
+            </small>
           </div>
 
           <h3 style={{ marginTop: '2rem' }}>Contato - Assinante</h3>
@@ -225,26 +221,6 @@ function ClienteForm() {
               type="email"
               name="assinante_email"
               value={formData.assinante_email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Telefone do Assinante</label>
-            <input
-              type="tel"
-              name="assinante_telefone"
-              value={formData.assinante_telefone}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Cargo do Assinante</label>
-            <input
-              type="text"
-              name="assinante_cargo"
-              value={formData.assinante_cargo}
               onChange={handleChange}
             />
           </div>
@@ -277,16 +253,6 @@ function ClienteForm() {
               type="tel"
               name="financeiro_telefone"
               value={formData.financeiro_telefone}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Cargo (Financeiro)</label>
-            <input
-              type="text"
-              name="financeiro_cargo"
-              value={formData.financeiro_cargo}
               onChange={handleChange}
             />
           </div>

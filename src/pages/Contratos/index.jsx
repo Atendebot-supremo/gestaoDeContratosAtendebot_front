@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import contratosService from '../../services/contratosService'
+import contratosService from '../../services/contratosService.mock'
+import projetosService from '../../services/projetosService.mock'
 import './Contratos.css'
 
 function Contratos() {
@@ -8,15 +9,21 @@ function Contratos() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [statusFilter, setStatusFilter] = useState('')
+  const [projetoFilter, setProjetoFilter] = useState('')
+  const [projetos, setProjetos] = useState([])
 
   useEffect(() => {
     loadContratos()
-  }, [statusFilter])
+    loadProjetos()
+  }, [statusFilter, projetoFilter])
 
   const loadContratos = async () => {
     try {
       setLoading(true)
-      const filters = statusFilter ? { status: statusFilter } : {}
+      const filters = {}
+      if (statusFilter) filters.status = statusFilter
+      if (projetoFilter) filters.projeto_id = projetoFilter
+      
       const data = await contratosService.getAll(filters)
       setContratos(data)
       setError(null)
@@ -24,6 +31,15 @@ function Contratos() {
       setError('Erro ao carregar contratos: ' + err.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadProjetos = async () => {
+    try {
+      const data = await projetosService.getAll()
+      setProjetos(data)
+    } catch (err) {
+      console.error('Erro ao carregar projetos:', err)
     }
   }
 
@@ -66,6 +82,21 @@ function Contratos() {
             <option value="Enviado">Enviado</option>
             <option value="Ativo">Ativo</option>
             <option value="Cancelado">Cancelado</option>
+          </select>
+        </div>
+        
+        <div className="form-group">
+          <label>Filtrar por Projeto:</label>
+          <select 
+            value={projetoFilter} 
+            onChange={(e) => setProjetoFilter(e.target.value)}
+          >
+            <option value="">Todos</option>
+            {projetos.map((projeto) => (
+              <option key={projeto.id} value={projeto.id}>
+                {projeto.nome_projeto}
+              </option>
+            ))}
           </select>
         </div>
       </div>

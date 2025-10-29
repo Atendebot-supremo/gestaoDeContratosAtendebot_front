@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import clientesService from '../../services/clientesService'
+import clientesService from '../../services/clientesService.mock'
 
 function Clientes() {
   const [clientes, setClientes] = useState([])
@@ -28,7 +28,8 @@ function Clientes() {
   const filteredClientes = clientes.filter(cliente =>
     cliente.razao_social?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cliente.cnpj?.includes(searchTerm) ||
-    cliente.email_principal?.toLowerCase().includes(searchTerm.toLowerCase())
+    cliente.assinante_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    cliente.financeiro_email?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   if (loading) {
@@ -60,8 +61,8 @@ function Clientes() {
           <tr>
             <th>Razão Social</th>
             <th>CNPJ</th>
-            <th>Email Principal</th>
-            <th>Telefone</th>
+            <th>Cidade/Estado</th>
+            <th>Email Assinante</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -77,8 +78,8 @@ function Clientes() {
               <tr key={cliente.id}>
                 <td>{cliente.razao_social}</td>
                 <td>{cliente.cnpj}</td>
-                <td>{cliente.email_principal}</td>
-                <td>{cliente.telefone_principal}</td>
+                <td>{cliente.cidade_estado || '-'}</td>
+                <td>{cliente.assinante_email || cliente.financeiro_email || '-'}</td>
                 <td>
                   <Link to={`/clientes/${cliente.id}`}>
                     <button className="btn btn-secondary">Gerenciar</button>

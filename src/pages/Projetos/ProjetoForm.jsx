@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import projetosService from '../../services/projetosService'
+import projetosService from '../../services/projetosService.mock'
 
 function ProjetoForm() {
   const { id } = useParams()

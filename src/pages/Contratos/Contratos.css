@@ -1,9 +1,13 @@
 .filters {
   margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .filters .form-group {
   max-width: 300px;
+  min-width: 200px;
 }
 
 .status-badge {

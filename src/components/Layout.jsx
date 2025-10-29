@@ -1,4 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom'
+import DevTools from './DevTools'
 import './Layout.css'
 
 function Layout() {
@@ -30,6 +31,7 @@ function Layout() {
       <main className="main-content">
         <Outlet />
       </main>
+      <DevTools />
     </div>
   )
 }

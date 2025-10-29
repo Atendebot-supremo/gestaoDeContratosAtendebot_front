@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import projetosService from '../../services/projetosService'
+import projetosService from '../../services/projetosService.mock'
 import './Projetos.css'
 
 function Projetos() {
@@ -58,6 +58,17 @@ function Projetos() {
                 )}
               </div>
               <div className="projeto-card-footer">
+                {projeto.template_pdf_path && (
+                  <a
+                    href={projeto.template_pdf_path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary"
+                    style={{ marginRight: '0.5rem' }}
+                  >
+                    📄 Ver PDF
+                  </a>
+                )}
                 <Link to={`/projetos/${projeto.id}`}>
                   <button className="btn btn-primary">Editar</button>
                 </Link>

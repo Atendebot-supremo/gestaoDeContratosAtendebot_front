@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import contratosService from '../../services/contratosService'
-import clientesService from '../../services/clientesService'
-import projetosService from '../../services/projetosService'
+import contratosService from '../../services/contratosService.mock'
+import clientesService from '../../services/clientesService.mock'
+import projetosService from '../../services/projetosService.mock'
 import './Contratos.css'
 
 function ContratoDetalhe() {
@@ -316,6 +316,47 @@ function ContratoDetalhe() {
                 </div>
               </div>
 
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label>Prazo Implementação (dias)</label>
+                  <input
+                    type="number"
+                    name="prazo_implementacao_dias"
+                    value={formData.prazo_implementacao_dias || ''}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label>Provedor OpenAI</label>
+                  <select
+                    name="provedor_openai"
+                    value={formData.provedor_openai || ''}
+                    onChange={handleChange}
+                  >
+                    <option value="">Selecione...</option>
+                    <option value="labfy">Labfy</option>
+                    <option value="cliente">Cliente</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Forma de Pagamento</label>
+                <select
+                  name="forma_pagamento"
+                  value={formData.forma_pagamento || ''}
+                  onChange={handleChange}
+                >
+                  <option value="">Selecione...</option>
+                  <option value="Boleto">Boleto</option>
+                  <option value="Cartão de Crédito">Cartão de Crédito</option>
+                  <option value="Pix">Pix</option>
+                  <option value="Transferência">Transferência</option>
+                </select>
+              </div>
+
               <div className="form-group">
                 <label>Observações para IA</label>
                 <textarea
@@ -330,8 +371,8 @@ function ContratoDetalhe() {
                 <label>Nome do Assinante *</label>
                 <input
                   type="text"
-                  name="assinante_nome"
-                  value={formData.assinante_nome}
+                  name="assinante_venda_nome"
+                  value={formData.assinante_venda_nome}
                   onChange={handleChange}
                   required
                 />
@@ -341,8 +382,8 @@ function ContratoDetalhe() {
                 <label>Email do Assinante *</label>
                 <input
                   type="email"
-                  name="assinante_email"
-                  value={formData.assinante_email}
+                  name="assinante_venda_email"
+                  value={formData.assinante_venda_email}
                   onChange={handleChange}
                   required
                 />
@@ -397,14 +438,35 @@ function ContratoDetalhe() {
                 </div>
               )}
 
+              {contrato.prazo_implementacao_dias && (
+                <div className="info-item">
+                  <label>Prazo Implementação:</label>
+                  <div className="value">{contrato.prazo_implementacao_dias} dias</div>
+                </div>
+              )}
+
+              {contrato.provedor_openai && (
+                <div className="info-item">
+                  <label>Provedor OpenAI:</label>
+                  <div className="value">{contrato.provedor_openai}</div>
+                </div>
+              )}
+
+              {contrato.forma_pagamento && (
+                <div className="info-item">
+                  <label>Forma de Pagamento:</label>
+                  <div className="value">{contrato.forma_pagamento}</div>
+                </div>
+              )}
+
               <div className="info-item">
                 <label>Assinante:</label>
-                <div className="value">{contrato.assinante_nome}</div>
+                <div className="value">{contrato.assinante_venda_nome}</div>
               </div>
 
               <div className="info-item">
                 <label>Email Assinante:</label>
-                <div className="value">{contrato.assinante_email}</div>
+                <div className="value">{contrato.assinante_venda_email}</div>
               </div>
 
               {contrato.observacoes_ia && (
