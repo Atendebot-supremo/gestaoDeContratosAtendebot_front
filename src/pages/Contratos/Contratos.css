@@ -1,0 +1,164 @@
+.filters {
+  margin-bottom: 1.5rem;
+}
+
+.filters .form-group {
+  max-width: 300px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-review {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-sent {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.contrato-details {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.contrato-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.contrato-section:last-child {
+  border-bottom: none;
+}
+
+.contrato-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #213547;
+}
+
+.contrato-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.info-item {
+  margin-bottom: 1rem;
+}
+
+.info-item label {
+  display: block;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.info-item .value {
+  color: #213547;
+  font-size: 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.document-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #213547;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.document-link:hover {
+  background-color: #e0e0e0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .status-pending {
+    background-color: #664d03;
+    color: #fff3cd;
+  }
+
+  .status-review {
+    background-color: #004085;
+    color: #cce5ff;
+  }
+
+  .status-sent {
+    background-color: #0c5460;
+    color: #d1ecf1;
+  }
+
+  .status-active {
+    background-color: #155724;
+    color: #d4edda;
+  }
+
+  .status-cancelled {
+    background-color: #721c24;
+    color: #f8d7da;
+  }
+
+  .contrato-details {
+    background-color: #1a1a1a;
+  }
+
+  .contrato-section {
+    border-bottom-color: #333;
+  }
+
+  .contrato-section h2 {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .info-item label {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .info-item .value {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .document-link {
+    background-color: #2a2a2a;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .document-link:hover {
+    background-color: #333;
+  }
+}
+
